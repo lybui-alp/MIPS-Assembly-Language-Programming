@@ -1,0 +1,52 @@
+.data
+	output: .asciiz "Enter a character from a to z: "
+	output1: .asciiz "The preceding character is: "
+	output2: .asciiz "The upper case of the character is: "
+	userInput: .space 1
+.text
+	main:
+		
+	#ENTER A CHARACTER
+	li $v0, 4
+	la $a0, output
+	syscall
+	
+	li $v0, 8
+	la $a0, userInput
+	li $a1, 20
+	syscall
+		
+	#THE PRECEDING CHARACTER
+	li $v0, 4
+	la $a0, output1
+	syscall
+	
+	li $v0, 4
+	la $t1, userInput
+	lb $t1, userInput($t0)
+	sub $t1, $t1, 1 #the preceding character using ASCII
+	sb $t1, userInput($t0)
+	li $v0, 4
+	la $a0, userInput
+	syscall
+	
+	#LOWER TO UPPER CASE  	    	
+	li $v0, 4
+	la $a0, output2
+	syscall
+	
+	sub $t1, $t1, -1
+	sb $t1, userInput($t0)
+	blt $t1, 'Z', exit
+    	blt $t1, 'a', case
+    	case:
+	sub $t1, $t1, 32 #lower to upper case
+	sb $t1, userInput($t0)
+	exit:
+	li $v0, 4
+	la $a0, userInput
+	syscall
+	
+	
+	
+	
